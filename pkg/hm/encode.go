@@ -157,7 +157,7 @@ func signedIntToBits(n int64, bitSize int) ([]uint8, error) {
 		return uintToBits(uint64(uint32(n)), 32), nil
 
 	case 64:
-		return uintToBits(uint64(uint16(n)), 64), nil
+		return uintToBits(uint64(n), 64), nil
 
 	default:
 		return nil, fmt.Errorf("Unexpected int size, expected int4, int8, int16, int32, int64, received bitsize: %d", bitSize)
