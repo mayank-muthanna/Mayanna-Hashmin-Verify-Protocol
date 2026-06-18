@@ -124,3 +124,35 @@ func TestCommitEncodedInt8Value(t *testing.T) {
 	}
 
 }
+
+func TestCommittedInt8ValuesVerifyOrNot(t *testing.T) {
+
+	encoded, err := EncodeValue(Value{
+		Kind: Int8,
+		Raw:  int64(18),
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	commitment_, opening_, err := CommitEncodedValue(encoded)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	for i := 0; i < len(commitment_.BitCommitments); i++ {
+
+		bitCommitment_ := commitment_.BitCommitments[i].Commitment
+		bitOpening_ := opening_.BitOpenings[i]
+
+		compareCommitment_and_ActualBit := VerifyBitOpening(bitCommitment_, bitOpening_)
+
+		if !compareCommitment_and_ActualBit {
+			t.Fatalf("Cmmitment failed at bit opening %d", i)
+		}
+
+	}
+
+}
