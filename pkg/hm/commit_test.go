@@ -156,3 +156,33 @@ func TestCommittedInt8ValuesVerifyOrNot(t *testing.T) {
 	}
 
 }
+
+func TestCommitEncodedStringValue(t *testing.T) {
+	encoded, err := EncodeValue(Value{
+		Kind: String,
+		Raw:  "MayankMuthanna",
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	commitment_, opening_, err := CommitEncodedValue(encoded)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if commitment_.Kind != String {
+		t.Fatal("expected string commitment")
+	}
+
+	if len(commitment_.StringCommitment) == 0 {
+		t.Fatal("expected string commitment bytes")
+	}
+
+	if len(opening_.StringSalt) != SaltSize {
+		t.Fatal("expected string salt")
+	}
+
+}
