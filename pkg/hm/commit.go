@@ -17,15 +17,23 @@ type BitOpening struct {
 }
 
 type ValueCommitment struct {
-	Kind        Kind
-	BitCommits  []BitCommitment
-	Commitments []byte
+	Kind Kind
+
+	// Used for bool, byte, int4, int8, int16, int32, int64
+	BitCommitments []BitCommitment
+
+	// Used only for string
+	StringCommitment []byte
 }
 
 type ValueOpening struct {
-	Kind        Kind
+	Kind Kind
+
+	// Used for bool, byte, int4, int8, int16, int32, int64
 	BitOpenings []BitOpening
-	Salt        []byte
+
+	// Used only for string
+	StringSalt []byte
 }
 
 const SaltSize = 32
@@ -74,4 +82,88 @@ func VerifyBitOpening(commitment []byte, opening BitOpening) bool {
 	}
 
 	return true
+}
+
+func CommitEncodedValue(encoded EncodedValue) (ValueCommitment, ValueOpening, error) {
+	if encoded.Kind == String {
+		return commitStringValue(encoded)
+	}
+
+	return commitBitsValue(encoded)
+}
+
+func commitBitsValue(encoded EncodedValue) (ValueCommitment, ValueOpening, error) {
+
+	var bitCommitments_ []BitCommitment
+	var bitOpenings_ []BitOpening
+
+	for index, bit := range encoded.Bits {
+
+		salt, err := RandomSalt()
+
+		if err != nil {
+			return ValueCommitment{}, ValueOpening{}, err
+		}
+
+		commitment, err := CommitBit(bit, salt)
+
+		if err != nil {
+			return ValueCommitment{}, ValueOpening{}, err
+		}
+
+		_bitCommitment := BitCommitment{
+			Index:      index,
+			Commitment: commitment,
+		}
+
+		_bitOpening := BitOpening{
+			Index: index,
+			Bit:   bit,
+			Salt:  salt,
+		}
+
+		bitCommitments_ = append(bitCommitments_, _bitCommitment)
+		bitOpenings_ = append(bitOpenings_, _bitOpening)
+	}
+
+	_valueCommitment := ValueCommitment{
+		Kind:           encoded.Kind,
+		BitCommitments: bitCommitments_,
+	}
+
+	_valueOpening := ValueOpening{
+		Kind:        encoded.Kind,
+		BitOpenings: bitOpenings_,
+	}
+
+	return _valueCommitment, _valueOpening, nil
+
+}
+
+func commitStringValue(encoded EncodedValue) (ValueCommitment, ValueOpening, error) {
+
+	salt, err := RandomSalt()
+
+	if err != nil {
+		return ValueCommitment{}, ValueOpening{}, err
+	}
+
+	commitment_ := Hash(
+		"hm:verify:v1",
+		encoded.Bytes,
+		salt,
+	)
+
+	valueCommitment_ := ValueCommitment{
+		Kind:             String,
+		StringCommitment: commitment_,
+	}
+
+	valueOpening_ := ValueOpening{
+		Kind:       String,
+		StringSalt: salt,
+	}
+
+	return valueCommitment_, valueOpening_, nil
+
 }
