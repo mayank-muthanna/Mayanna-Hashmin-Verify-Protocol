@@ -93,3 +93,34 @@ func TestWrongSaltVerificationFails(t *testing.T) {
 	}
 
 }
+
+func TestCommitEncodedInt8Value(t *testing.T) {
+
+	encoded, err := EncodeValue(Value{
+		Kind: Int8,
+		Raw:  int64(18),
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	commitment, opening, err := CommitEncodedValue(encoded)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if commitment.Kind != Int8 {
+		t.Fatal("Expected Int8 commitment")
+	}
+
+	if len(commitment.BitCommitments) != 8 {
+		t.Fatal("Expected 8 bit commitments")
+	}
+
+	if len(opening.BitOpenings) != 8 {
+		t.Fatal("Expected 8 bit openings")
+	}
+
+}
