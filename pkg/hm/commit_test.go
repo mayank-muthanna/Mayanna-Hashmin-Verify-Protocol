@@ -59,3 +59,37 @@ func TestWrongBitCommitVerifyFails(t *testing.T) {
 		t.Fatalf("Commitments are being verified even with differing values")
 	}
 }
+
+func TestWrongSaltVerificationFails(t *testing.T) {
+
+	salt, err := RandomSalt()
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	wrongSalt, err := RandomSalt()
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	CommonTestingBit := uint8(1)
+
+	commitment, err := CommitBit(CommonTestingBit, wrongSalt)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	opening := BitOpening{
+		0,
+		CommonTestingBit,
+		salt,
+	}
+
+	if VerifyBitOpening(commitment, opening) {
+		t.Fatalf("Commitments are being verified even with differing salts")
+	}
+
+}
