@@ -16,6 +16,18 @@ type BitOpening struct {
 	Salt  []byte
 }
 
+type ValueCommitment struct {
+	Kind        Kind
+	BitCommits  []BitCommitment
+	Commitments []byte
+}
+
+type ValueOpening struct {
+	Kind        Kind
+	BitOpenings []BitOpening
+	Salt        []byte
+}
+
 const SaltSize = 32
 
 func RandomSalt() ([]byte, error) {
