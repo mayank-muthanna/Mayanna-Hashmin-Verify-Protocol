@@ -32,7 +32,7 @@ func RandomSalt() ([]byte, error) {
 
 func CommitBit(bit uint8, salt []byte) ([]byte, error) {
 
-	if bit != 0 || bit != 1 {
+	if bit != 0 && bit != 1 {
 		return nil, fmt.Errorf("%d should be {0, 1} ", bit)
 	}
 
@@ -47,4 +47,19 @@ func CommitBit(bit uint8, salt []byte) ([]byte, error) {
 		[]byte{bit},
 		salt,
 	), nil
+}
+
+func VerifyBitOpening(commitment []byte, opening BitOpening) bool {
+
+	commit_derived_from_opening, err := CommitBit(opening.Bit, opening.Salt)
+
+	if err != nil {
+		return false
+	}
+
+	if string(commit_derived_from_opening) != string(commitment) {
+		return false
+	}
+
+	return true
 }
