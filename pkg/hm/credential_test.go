@@ -27,3 +27,27 @@ func TestBuildInt8FieldRoot(t *testing.T) {
 	}
 
 }
+
+func TestBuildStringFieldRoot(t *testing.T) {
+
+	encoded, err := EncodeValue(Value{
+		Kind: String,
+		Raw:  string("MayankMuthanna"),
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	commitment, _, err := CommitEncodedValue(encoded)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	root := BuildFieldRoot(commitment)
+
+	if len(string(root)) == 0 {
+		t.Fatal("Empty merkle root for string")
+	}
+}
