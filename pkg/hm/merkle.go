@@ -40,3 +40,19 @@ func BuildNextLevel(currentLevel [][]byte) [][]byte {
 	return nextLevel
 
 }
+
+func BuildMerkleRoot(leaves [][]byte) []byte {
+
+	if len(leaves) == 0 {
+		return nil
+	}
+
+	currentLevel := leaves
+
+	for len(currentLevel) > 1 { //Making sure that there are alteast minimum 2 leaves
+		currentLevel = BuildNextLevel(currentLevel)
+	}
+
+	return currentLevel[0]
+
+}
