@@ -7,16 +7,16 @@ type CredentialFiled struct {
 
 type Credential struct {
 	Fields []CredentialFiled
-	Root   []byte
+	Root   Root
 }
 
-func BuildFieldRoot(commitment ValueCommitment) []byte {
+func BuildFieldRoot(commitment ValueCommitment) Root {
 
 	if commitment.Kind == String {
 		return HashLeaf(commitment.StringCommitment)
 	}
 
-	var leaves [][]byte
+	var leaves []Root
 
 	for _, bitCommitment := range commitment.BitCommitments {
 
@@ -30,9 +30,9 @@ func BuildFieldRoot(commitment ValueCommitment) []byte {
 	return merkleRoot
 }
 
-func BuildCredentialRoot(fields []CredentialFiled) []byte {
+func BuildCredentialRoot(fields []CredentialFiled) Root {
 
-	var fieldRoots [][]byte
+	var fieldRoots []Root
 
 	for _, field := range fields {
 

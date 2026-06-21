@@ -4,11 +4,11 @@ import "testing"
 
 func TestMerkleLeavesProduceSameRoot(t *testing.T) {
 
-	leaves := [][]byte{
-		HashLeaf([]byte("A")),
-		HashLeaf([]byte("B")),
-		HashLeaf([]byte("C")),
-		HashLeaf([]byte("D")),
+	leaves := []Root{
+		HashLeaf(Root("A")),
+		HashLeaf(Root("B")),
+		HashLeaf(Root("C")),
+		HashLeaf(Root("D")),
 	}
 
 	root1 := BuildMerkleRoot(leaves)

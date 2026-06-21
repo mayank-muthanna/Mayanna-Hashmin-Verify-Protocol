@@ -24,3 +24,7 @@ type EncodedValue struct {
 	Bytes []byte
 	Bits  []uint8
 }
+
+//Readablity Friendly types to be used in fxns
+
+type Root []byte
