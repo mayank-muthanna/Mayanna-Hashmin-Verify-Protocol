@@ -51,3 +51,37 @@ func TestBuildStringFieldRoot(t *testing.T) {
 		t.Fatal("Empty merkle root for string")
 	}
 }
+
+func TestBuildCredentialRoot(t *testing.T) {
+
+	ageEncoded, _ := EncodeValue(Value{
+		Kind: Int8,
+		Raw:  int64(18),
+	})
+
+	isStudentEncoded, _ := EncodeValue(Value{
+		Kind: Bool,
+		Raw:  true,
+	})
+
+	ageCommitment, _, _ := CommitEncodedValue(ageEncoded)
+	isStudentBoolCommitment, _, _ := CommitEncodedValue(isStudentEncoded)
+
+	fields := []CredentialFiled{
+		{
+			Name:       "age",
+			Commitment: ageCommitment,
+		},
+		{
+			Name:       "isStudent",
+			Commitment: isStudentBoolCommitment,
+		},
+	}
+
+	root1 := BuildCredentialRoot(fields)
+	root2 := BuildCredentialRoot(fields)
+
+	if string(root1) != string(root2) {
+		t.Fatal("Same fields are producing different roots when sent thorugh function twice")
+	}
+}
