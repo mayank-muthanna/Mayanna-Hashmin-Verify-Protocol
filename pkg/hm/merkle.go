@@ -14,3 +14,29 @@ func HashLeaf(data []byte) []byte {
 		data,
 	)
 }
+
+func BuildNextLevel(currentLevel [][]byte) [][]byte {
+
+	var nextLevel [][]byte
+
+	for i := 0; i < len(currentLevel); i = +2 {
+
+		left := currentLevel[i]
+
+		var right []byte
+
+		if i+1 < len(currentLevel) {
+			right = currentLevel[i+1]
+		} else {
+			right = left
+		}
+
+		parent := HashNode(left, right)
+
+		nextLevel = append(nextLevel, parent)
+
+	}
+
+	return nextLevel
+
+}
