@@ -1,0 +1,29 @@
+package hm
+
+import "testing"
+
+func TestBuildInt8FieldRoot(t *testing.T) {
+
+	encoded, err := EncodeValue(Value{
+		Kind: Int8,
+		Raw:  int64(18),
+	})
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	commitment, _, err := CommitEncodedValue(encoded)
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	root1 := BuildFieldRoot(commitment)
+	root2 := BuildFieldRoot(commitment)
+
+	if string(root1) != string(root2) {
+		t.Fatalf("Same commitments should habe given same roots but received otherwise")
+	}
+
+}
