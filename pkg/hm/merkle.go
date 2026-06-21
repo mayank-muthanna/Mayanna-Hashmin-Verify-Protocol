@@ -19,7 +19,7 @@ func BuildNextLevel(currentLevel [][]byte) [][]byte {
 
 	var nextLevel [][]byte
 
-	for i := 0; i < len(currentLevel); i = +2 {
+	for i := 0; i < len(currentLevel); i += 2 {
 
 		left := currentLevel[i]
 
