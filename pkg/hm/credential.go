@@ -1,5 +1,15 @@
 package hm
 
+type CredentialFiled struct {
+	Name       string
+	Commitment ValueCommitment
+}
+
+type Credential struct {
+	Fields []CredentialFiled
+	Root   []byte
+}
+
 func BuildFieldRoot(commitment ValueCommitment) []byte {
 
 	if commitment.Kind == String {
@@ -18,4 +28,20 @@ func BuildFieldRoot(commitment ValueCommitment) []byte {
 	merkleRoot := BuildMerkleRoot(leaves)
 
 	return merkleRoot
+}
+
+func BuildCredentialRoot(fields []CredentialFiled) []byte {
+
+	var fieldRoots [][]byte
+
+	for _, field := range fields {
+
+		root := BuildFieldRoot(field.Commitment)
+		fieldRoots = append(fieldRoots, root)
+	}
+
+	merkleRoot := BuildMerkleRoot(fieldRoots)
+
+	return merkleRoot
+
 }
