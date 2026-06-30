@@ -19,3 +19,63 @@ func TestMerkleLeavesProduceSameRoot(t *testing.T) {
 	}
 
 }
+
+func TestMerkleProofVerifies(t *testing.T) {
+
+	leaves := []Root{
+		HashLeaf([]byte("A")),
+		HashLeaf([]byte("B")),
+		HashLeaf([]byte("C")),
+		HashLeaf([]byte("D")),
+	}
+
+	root := BuildMerkleRoot(leaves)
+	proof := BuildMerkleProof(leaves, 1)
+
+	verifyRoots := VerifyMerkleProof(proof, root)
+
+	if !verifyRoots {
+		t.Fatal("Proof should verify, it did not")
+	}
+
+}
+
+func TestMerkleProofRejectsWrongRoot(t *testing.T) {
+
+	leaves := []Root{
+		HashLeaf([]byte("A")),
+		HashLeaf([]byte("B")),
+		HashLeaf([]byte("C")),
+		HashLeaf([]byte("D")),
+	}
+
+	root := BuildMerkleRoot(leaves)
+
+	proof := BuildMerkleProof(leaves, 1)
+
+	root[0] ^= 1 // Corrupt the root
+
+	if VerifyMerkleProof(proof, root) {
+		t.Fatal("proof should fail")
+	}
+}
+
+func TestMerkleProofRejectsTamperedSibling(t *testing.T) {
+
+	leaves := []Root{
+		HashLeaf([]byte("A")),
+		HashLeaf([]byte("B")),
+		HashLeaf([]byte("C")),
+		HashLeaf([]byte("D")),
+	}
+
+	root := BuildMerkleRoot(leaves)
+
+	proof := BuildMerkleProof(leaves, 1)
+
+	proof.Steps[0].Sibling[0] ^= 1
+
+	if VerifyMerkleProof(proof, root) {
+		t.Fatal("tampered proof should fail")
+	}
+}
