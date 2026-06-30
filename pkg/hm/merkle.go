@@ -88,3 +88,61 @@ func FindSibling(currentLevel []Root, index int) (Root, bool) {
 	return currentLevel[siblingIndex], true
 
 }
+
+func BuildMerkleProof(leaves []Root, index int) MerkleProof {
+
+	proof := MerkleProof{
+		LeafIndex: index,
+		Leaf:      leaves[index],
+	}
+
+	currentLevel := leaves
+	currentIndex := index
+
+	for len(currentLevel) > 1 {
+
+		sibling, exists := FindSibling(currentLevel, currentIndex)
+
+		step := ProofStep{
+			Sibling: sibling,
+			IsLeft:  currentIndex%2 == 1,
+		}
+
+		//ingored for timebeing
+		_ = exists
+
+		proof.Steps = append(proof.Steps, step)
+
+		currentIndex = ParentIndex(currentIndex)
+		currentLevel = BuildNextLevel(currentLevel)
+
+	}
+
+	return proof
+}
+
+func VerifyMerkleProof(proof MerkleProof, expectedRoot Root) bool {
+
+	current := proof.Leaf
+
+	for _, step := range proof.Steps {
+
+		if step.IsLeft {
+			current = HashNode(step.Sibling, current)
+		} else {
+			current = HashNode(current, step.Sibling)
+		}
+
+	}
+
+	var isConstructedMatchExpected bool
+
+	if string(current) == string(expectedRoot) {
+		isConstructedMatchExpected = true
+	} else {
+		isConstructedMatchExpected = false
+	}
+
+	return isConstructedMatchExpected
+
+}
