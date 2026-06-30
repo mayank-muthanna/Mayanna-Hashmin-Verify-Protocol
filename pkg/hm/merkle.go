@@ -1,5 +1,7 @@
 package hm
 
+import "bytes"
+
 func HashNode(left Root, right Root) Root {
 	return Hash(
 		"hm:merkle:node:v1",
@@ -137,7 +139,7 @@ func VerifyMerkleProof(proof MerkleProof, expectedRoot Root) bool {
 
 	var isConstructedMatchExpected bool
 
-	if string(current) == string(expectedRoot) {
+	if bytes.Equal(current, expectedRoot) {
 		isConstructedMatchExpected = true
 	} else {
 		isConstructedMatchExpected = false
