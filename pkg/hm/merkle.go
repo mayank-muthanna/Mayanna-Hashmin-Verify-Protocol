@@ -42,6 +42,7 @@ func BuildNextLevel(currentLevel []Root) []Root {
 
 }
 
+// uses above function to build Merkle Tree
 func BuildMerkleRoot(leaves []Root) Root {
 
 	if len(leaves) == 0 {
@@ -56,5 +57,21 @@ func BuildMerkleRoot(leaves []Root) Root {
 	}
 
 	return currentLevel[0]
+
+}
+
+// 0,1 -> 0 		2,3 -> 1 		4,5 -> 2
+func ParentIndex(index int) int {
+	return index / 2
+}
+
+// Finds index of sibling (if left in case 0,1: 1 -> gives 0 (left sibling) )
+func SiblingIndex(index int) int {
+
+	if index%2 == 0 {
+		return index + 1
+	}
+
+	return index - 1
 
 }

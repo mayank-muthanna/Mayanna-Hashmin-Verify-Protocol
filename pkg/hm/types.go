@@ -28,3 +28,13 @@ type EncodedValue struct {
 //Readablity Friendly types to be used in fxns
 
 type Root []byte
+
+type ProofStep struct {
+	Sibling Root
+	IsLeft  bool
+}
+
+type MerkleProof struct {
+	Leaf  Root
+	Steps []ProofStep
+}
