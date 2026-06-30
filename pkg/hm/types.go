@@ -35,6 +35,7 @@ type ProofStep struct {
 }
 
 type MerkleProof struct {
-	Leaf  Root
-	Steps []ProofStep
+	LeafIndex int
+	Leaf      Root
+	Steps     []ProofStep
 }
