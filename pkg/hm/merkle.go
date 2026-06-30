@@ -75,3 +75,16 @@ func SiblingIndex(index int) int {
 	return index - 1
 
 }
+
+func FindSibling(currentLevel []Root, index int) (Root, bool) {
+
+	siblingIndex := SiblingIndex(index)
+
+	//If there are no available sibling in 2 pairs, return same root - for cases where merkle has odd number of leaves
+	if siblingIndex >= len(currentLevel) {
+		return currentLevel[index], false
+	}
+
+	return currentLevel[siblingIndex], true
+
+}
