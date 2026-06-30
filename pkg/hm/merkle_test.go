@@ -79,3 +79,25 @@ func TestMerkleProofRejectsTamperedSibling(t *testing.T) {
 		t.Fatal("tampered proof should fail")
 	}
 }
+
+func TestEveryLeafProofVerifies(t *testing.T) {
+
+	leaves := []Root{
+		HashLeaf([]byte("A")),
+		HashLeaf([]byte("B")),
+		HashLeaf([]byte("C")),
+		HashLeaf([]byte("D")),
+		HashLeaf([]byte("E")),
+	}
+
+	root := BuildMerkleRoot(leaves)
+
+	for i := range leaves {
+
+		proof := BuildMerkleProof(leaves, i)
+
+		if !VerifyMerkleProof(proof, root) {
+			t.Fatalf("proof failed for leaf %d", i)
+		}
+	}
+}
