@@ -87,7 +87,7 @@ func (policy *Policy) addPredicate(field SchemaField, predicateType PredciateCom
 	}
 
 	_value := Value{
-		Kind: SchemaField.Kind,
+		Kind: field.Kind,
 		Raw:  raw,
 	}
 
