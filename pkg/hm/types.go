@@ -25,6 +25,11 @@ type EncodedValue struct {
 	Bits  []uint8
 }
 
+type SchemaField struct {
+	VarName string
+	Kind    Kind
+}
+
 type CredentialValue struct {
 	Field SchemaField
 	Value Value
