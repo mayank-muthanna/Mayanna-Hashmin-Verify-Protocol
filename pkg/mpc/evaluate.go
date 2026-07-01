@@ -74,14 +74,43 @@ func evaluateNOT(gate Gate, views []*View) {
 
 func evaluateAND(gate Gate, views []*View) error {
 
-	for _, view := range views {
+	x := [3]uint8{}
+	y := [3]uint8{}
 
-		a := view.Wires[gate.InputA]
-
-		b := view.Wires[gate.InputB]
-
-		view.Wires[gate.Output] = a & b
+	for i := 0; i < 3; i++ {
+		x[i] = views[i].Wires[gate.InputA]
+		y[i] = views[i].Wires[gate.InputB]
 	}
+
+	r, err := RandomZeroShares()
+	if err != nil {
+		return err
+	}
+
+	z0 := (x[0] & y[0]) ^ (x[0] & y[1]) ^ (x[1] & y[0]) ^ r[0] ^ r[2]
+
+	z1 := (x[1] & y[1]) ^ (x[1] & y[2]) ^ (x[2] & y[1]) ^ r[1] ^ r[0]
+
+	z2 := (x[2] & y[2]) ^ (x[2] & y[0]) ^ (x[0] & y[2]) ^ r[2] ^ r[1]
+
+	views[0].Wires[gate.Output] = z0
+	views[1].Wires[gate.Output] = z1
+	views[2].Wires[gate.Output] = z2
+
+	views[0].Randomness = append(
+		views[0].Randomness,
+		r[0],
+	)
+
+	views[1].Randomness = append(
+		views[1].Randomness,
+		r[1],
+	)
+
+	views[2].Randomness = append(
+		views[2].Randomness,
+		r[2],
+	)
 
 	return nil
 }
