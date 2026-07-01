@@ -1,6 +1,8 @@
 package mpc
 
-import "crypto/rand"
+import (
+	"crypto/sha256"
+)
 
 type Challenge uint8
 
@@ -10,14 +12,17 @@ const (
 	Open20 Challenge = 2
 )
 
-func RandomChallenge() (Challenge, error) {
+func FiatShamir(commitments [3]Commitment) Challenge {
 
-	b := make([]byte, 1)
+	h := sha256.New()
 
-	_, err := rand.Read(b)
-	if err != nil {
-		return 0, nil
+	for _, commitment := range commitments {
+		h.Write(commitment)
 	}
 
-	return Challenge(b[0] % 3), nil
+	sum := h.Sum(nil)
+
+	return Challenge(
+		sum[0] % 3,
+	)
 }

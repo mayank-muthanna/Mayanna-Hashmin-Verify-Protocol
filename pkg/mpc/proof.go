@@ -1,10 +1,16 @@
 package mpc
 
-type RoundProof struct {
-	Challenge Challenge
+type OpenedView struct {
+	Player int
+	View   View
+}
 
-	View1 View
-	View2 View
+type RoundProof struct {
+	Commitments [3]Commitment
+	Challenge   Challenge
+
+	View1 OpenedView
+	View2 OpenedView
 }
 
 type Proof struct {

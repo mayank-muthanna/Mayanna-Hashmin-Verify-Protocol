@@ -9,28 +9,32 @@ func ProveRound(circuit *Circuit, witness *Witness) (RoundProof, error) {
 
 	transcript := NewTranscript(views)
 
-	challenge, err := RandomChallenge()
+	commitments, err := CommitViews(views)
+
 	if err != nil {
 		return RoundProof{}, err
 	}
 
+	challenge := FiatShamir(commitments)
+
 	proof := RoundProof{
-		Challenge: challenge,
+		Commitments: commitments,
+		Challenge:   challenge,
 	}
 
 	if challenge == Open01 {
-		proof.View1 = transcript.Views[0]
-		proof.View2 = transcript.Views[1]
+		proof.View1 = OpenedView{Player: 0, View: transcript.Views[0]}
+		proof.View2 = OpenedView{Player: 1, View: transcript.Views[1]}
 	}
 
 	if challenge == Open12 {
-		proof.View1 = transcript.Views[1]
-		proof.View2 = transcript.Views[2]
+		proof.View1 = OpenedView{Player: 1, View: transcript.Views[1]}
+		proof.View2 = OpenedView{Player: 2, View: transcript.Views[2]}
 	}
 
 	if challenge == Open20 {
-		proof.View1 = transcript.Views[2]
-		proof.View2 = transcript.Views[0]
+		proof.View1 = OpenedView{Player: 2, View: transcript.Views[2]}
+		proof.View2 = OpenedView{Player: 0, View: transcript.Views[0]}
 	}
 
 	return proof, nil
