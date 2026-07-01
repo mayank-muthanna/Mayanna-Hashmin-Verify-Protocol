@@ -25,6 +25,11 @@ type EncodedValue struct {
 	Bits  []uint8
 }
 
+type CredentialValue struct {
+	Field SchemaField
+	Value Value
+}
+
 //Readablity Friendly types to be used in fxns
 
 type Root []byte

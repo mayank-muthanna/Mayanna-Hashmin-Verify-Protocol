@@ -5,25 +5,25 @@ import "testing"
 func TestCreateSchema(t *testing.T) {
 
 	schema := Schema{
-		Name:              "AADHAAR_AUTHORITY",
+		SchemaName:        "AADHAAR_AUTHORITY",
 		IdentifyingSecret: "aadhaar_number",
 		Fields: []SchemaField{
 			{
-				Name: "name",
-				Kind: String,
+				VarName: "name",
+				Kind:    String,
 			},
 			{
-				Name: "age",
-				Kind: Int8,
+				VarName: "age",
+				Kind:    Int8,
 			},
 			{
-				Name: "student",
-				Kind: Bool,
+				VarName: "student",
+				Kind:    Bool,
 			},
 		},
 	}
 
-	if schema.Name != "AADHAAR_AUTHORITY" {
+	if schema.SchemaName != "AADHAAR_AUTHORITY" {
 		t.Fatal("incorrect schema name")
 	}
 
