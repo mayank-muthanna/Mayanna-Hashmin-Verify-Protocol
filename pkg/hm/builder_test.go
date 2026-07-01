@@ -36,6 +36,7 @@ func TestCreateCredentialBuilder(t *testing.T) {
 
 }
 
+// Test if Addition of Variables
 func TestBuilderAdd(t *testing.T) {
 
 	schema := NewSchema(
@@ -56,5 +57,39 @@ func TestBuilderAdd(t *testing.T) {
 
 	if len(builder.Values) != 1 {
 		t.Fatal("expected one value")
+	}
+}
+
+// Addition of non-schema-declared variables should fail
+func TestBuilderRejectUnknownField(t *testing.T) {
+
+	schema := NewSchema(
+		"AADHAAR",
+		"aadhaar_number",
+		nil,
+	)
+
+	builder := NewCredentialBuilder(schema)
+
+	if builder.Add("hello", int64(1)) == nil {
+		t.Fatal("expected error")
+	}
+}
+
+// Wrong Field type should fail
+func TestBuilderRejectWrongType(t *testing.T) {
+
+	schema := NewSchema(
+		"AADHAAR",
+		"aadhaar_number",
+		[]SchemaField{
+			{VarName: "age", Kind: Int8},
+		},
+	)
+
+	builder := NewCredentialBuilder(schema)
+
+	if builder.Add("age", "eighteen") == nil {
+		t.Fatal("expected type error")
 	}
 }
