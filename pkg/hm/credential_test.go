@@ -67,13 +67,13 @@ func TestBuildCredentialRoot(t *testing.T) {
 	ageCommitment, _, _ := CommitEncodedValue(ageEncoded)
 	isStudentBoolCommitment, _, _ := CommitEncodedValue(isStudentEncoded)
 
-	fields := []CredentialFiled{
+	fields := []CredentialField{
 		{
-			Name:       "age",
+			VarName:    "age",
 			Commitment: ageCommitment,
 		},
 		{
-			Name:       "isStudent",
+			VarName:    "isStudent",
 			Commitment: isStudentBoolCommitment,
 		},
 	}

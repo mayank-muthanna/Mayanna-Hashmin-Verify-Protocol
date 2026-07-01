@@ -1,12 +1,12 @@
 package hm
 
-type CredentialFiled struct {
-	Name       string
+type CredentialField struct {
+	VarName    string
 	Commitment ValueCommitment
 }
 
 type Credential struct {
-	Fields []CredentialFiled
+	Fields []CredentialField
 	Root   Root
 }
 
@@ -30,7 +30,7 @@ func BuildFieldRoot(commitment ValueCommitment) Root {
 	return merkleRoot
 }
 
-func BuildCredentialRoot(fields []CredentialFiled) Root {
+func BuildCredentialRoot(fields []CredentialField) Root {
 
 	var fieldRoots []Root
 
