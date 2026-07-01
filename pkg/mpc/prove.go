@@ -1,20 +1,20 @@
 package mpc
 
-func Prove(circuit *Circuit, witness *Witness) (Proof, error) {
+func ProveRound(circuit *Circuit, witness *Witness) (RoundProof, error) {
 
 	views, err := EvaluateCircuit(circuit, witness)
 	if err != nil {
-		return Proof{}, err
+		return RoundProof{}, err
 	}
 
 	transcript := NewTranscript(views)
 
 	challenge, err := RandomChallenge()
 	if err != nil {
-		return Proof{}, err
+		return RoundProof{}, err
 	}
 
-	proof := Proof{
+	proof := RoundProof{
 		Challenge: challenge,
 	}
 
@@ -30,9 +30,35 @@ func Prove(circuit *Circuit, witness *Witness) (Proof, error) {
 
 	if challenge == Open20 {
 		proof.View1 = transcript.Views[2]
-		proof.View2 = transcript.Views[1]
+		proof.View2 = transcript.Views[0]
 	}
 
 	return proof, nil
 
+}
+
+const Repetitions = 80
+
+func Prove(circuit *Circuit, witness *Witness) (Proof, error) {
+
+	proof := Proof{}
+
+	for i := 0; i < Repetitions; i++ {
+
+		round, err := ProveRound(
+			circuit,
+			witness,
+		)
+
+		if err != nil {
+			return Proof{}, err
+		}
+
+		proof.Rounds = append(
+			proof.Rounds,
+			round,
+		)
+	}
+
+	return proof, nil
 }
