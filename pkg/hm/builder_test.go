@@ -35,3 +35,26 @@ func TestCreateCredentialBuilder(t *testing.T) {
 	}
 
 }
+
+func TestBuilderAdd(t *testing.T) {
+
+	schema := NewSchema(
+		"AADHAAR",
+		"aadhaar_number",
+		[]SchemaField{
+			{VarName: "age", Kind: Int8},
+		},
+	)
+
+	builder := NewCredentialBuilder(schema)
+
+	err := builder.Add("age", int64(18))
+
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if len(builder.Values) != 1 {
+		t.Fatal("expected one value")
+	}
+}
