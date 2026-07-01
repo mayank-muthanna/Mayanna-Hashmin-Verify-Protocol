@@ -6,8 +6,9 @@ type CredentialField struct {
 }
 
 type Credential struct {
-	Fields []CredentialField
-	Root   Root
+	SchemaName string
+	Fields     []CredentialField
+	Root       Root
 }
 
 func BuildFieldRoot(commitment ValueCommitment) Root {
