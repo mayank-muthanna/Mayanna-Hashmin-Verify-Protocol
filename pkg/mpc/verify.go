@@ -2,6 +2,10 @@ package mpc
 
 func Verify(circuit *Circuit, proof Proof) bool {
 
+	if len(proof.Rounds) != Repetitions {
+		return false
+	}
+
 	for _, round := range proof.Rounds {
 		if !VerifyRound(circuit, round) {
 			return false
@@ -12,6 +16,26 @@ func Verify(circuit *Circuit, proof Proof) bool {
 }
 
 func VerifyRound(circuit *Circuit, round RoundProof) bool {
+
+	commitment1, err := CommitView(round.View1.View)
+	if err != nil {
+		return false
+	}
+
+	commitment2, err := CommitView(round.View2.View)
+	if err != nil {
+		return false
+	}
+
+	player1, player2 := OpenPlayer(round.Challenge)
+
+	if string(commitment1) != string(round.Commitments[player1]) {
+		return false
+	}
+
+	if string(commitment2) != string(round.Commitments[player2]) {
+		return false
+	}
 
 	challenge := FiatShamir(round.Commitments)
 
