@@ -2,6 +2,14 @@
 
 **Proving a credential claim without revealing the underlying value.**
 
+### [Watch the animated explainer (6:07 · Full HD)](docs/Mayanna-HashMin-Explainer-1080p.mp4)
+
+[![Watch the narrated Mayanna–HashMin explainer](docs/video-preview.jpg)](docs/Mayanna-HashMin-Explainer-1080p.mp4)
+
+A step-by-step, narrated walkthrough of the four-bit example, issuer signatures, secret sharing and MPC-in-the-head verification.
+
+[Download the video](https://github.com/mayank-muthanna/Mayanna-Hashmin-Verify-Protocol/raw/refs/heads/master/docs/Mayanna-HashMin-Explainer-1080p.mp4)
+
 ### [Read the research paper (PDF)](docs/Mayanna-HashMin-Primitives.pdf)
 
 [Download the PDF](https://github.com/mayank-muthanna/Mayanna-Hashmin-Verify-Protocol/raw/refs/heads/master/docs/Mayanna-HashMin-Primitives.pdf) · [MIT licence](LICENSE) · [Contributing](CONTRIBUTING.md) · [Security](SECURITY.md)
