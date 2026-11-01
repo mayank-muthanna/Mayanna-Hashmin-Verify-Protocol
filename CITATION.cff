@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "If you use this project, please cite the accompanying research paper."
+type: software
+title: "Mayanna-HashMin Verify Protocol"
+authors:
+  - family-names: Muthanna
+    given-names: Mayank
+repository-code: "https://github.com/mayank-muthanna/Mayanna-Hashmin-Verify-Protocol"
+url: "https://github.com/mayank-muthanna/Mayanna-Hashmin-Verify-Protocol"
+license: MIT
+preferred-citation:
+  type: report
+  title: "Mayanna–HashMin Primitives: Simple Hash-Based Zero-Knowledge Predicate Proofs for Small Credential Claims"
+  authors:
+    - family-names: Muthanna
+      given-names: Mayank
+  date-released: 2026-07-20
+  url: "https://github.com/mayank-muthanna/Mayanna-Hashmin-Verify-Protocol/blob/master/docs/Mayanna-HashMin-Primitives.pdf"
